@@ -1,0 +1,12 @@
+{
+  "name": "memedit",
+  "displayName": "memedit",
+  "expo": {
+    "name": "memedit",
+    "slug": "memedit",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
