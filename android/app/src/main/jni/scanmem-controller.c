@@ -7,6 +7,9 @@
 
 // #include "scanmem-controller.h"
 
+// in termux: ./configure --enable-static --without-readline --with pic; make
+// adb pull /data/data/com.termux/files/home/scanmem/.libs/libscanmem.so.1.0.0 android/app/src/main/jniLibs/arm64-v8a/libscanmem.so
+
 void *libscanmem;
 const char *(*sm_get_version)(void);
 bool (*sm_init)(void);
@@ -16,18 +19,6 @@ void (*sm_backend_exec_cmd)(const char *);
 void (*sm_cleanup)(void);
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
-  // libscanmem = dlopen("/data/data/com.memedit/lib/libscanmem.so.1.0.0", RTLD_LAZY);
-  // if (libscanmem == NULL) printf("%s", dlerror());
-  // sm_get_version = dlsym(libscanmem, "sm_get_version");
-  // sm_init = dlsym(libscanmem, "sm_init");
-  // sm_set_backend = dlsym(libscanmem, "sm_set_backend");
-  // sm_backend_exec_cmd = dlsym(libscanmem, "sm_backend_exec_cmd");
-  // sm_cleanup = dlsym(libscanmem, "sm_cleanup");
-  // sm_get_num_matches = dlsym(libscanmem, "sm_get_num_matches");
-
-  // sm_init();
-  // sm_set_backend();
-
   return JNI_VERSION_1_6;
 }
 
@@ -39,10 +30,17 @@ JNIEXPORT void JNICALL Java_com_memedit_ScanMem_init(JNIEnv *env, jclass obj, js
   strcat(filepath, sofile);
   libscanmem = dlopen(filepath, RTLD_LAZY);
   sm_get_version = dlsym(libscanmem, "sm_get_version");
+  sm_init = dlsym(libscanmem, "sm_init");
+  sm_set_backend = dlsym(libscanmem, "sm_set_backend");
+  sm_backend_exec_cmd = dlsym(libscanmem, "sm_backend_exec_cmd");
+  sm_cleanup = dlsym(libscanmem, "sm_cleanup");
+  sm_get_num_matches = dlsym(libscanmem, "sm_get_num_matches");
+
+  sm_init();
+  sm_set_backend();
 }
 
 JNIEXPORT jstring JNICALL Java_com_memedit_ScanMem_sm_1get_1version(JNIEnv *env, jclass obj) {
-  return (*env)->NewStringUTF(env, "version from C");
   return (*env)->NewStringUTF(env, sm_get_version());
 }
 
