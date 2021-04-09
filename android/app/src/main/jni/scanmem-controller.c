@@ -3,6 +3,7 @@
 #include <dlfcn.h>
 #include <stdbool.h>
 #include <jni.h>
+#include <string.h>
 
 // #include "scanmem-controller.h"
 
@@ -30,12 +31,22 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
   return JNI_VERSION_1_6;
 }
 
-JNIEXPORT jstring JNICALL Java_com_memedit_ScanMem_sm_1get_1version(JNIEnv *env, jclass obj) {
-  return (*env)->NewStringUTF(env, "version from C");
-  // return (*env)->NewStringUTF(env, sm_get_version());
+JNIEXPORT void JNICALL Java_com_memedit_ScanMem_init(JNIEnv *env, jclass obj, jstring nativeLibraryDir) {
+	const char* libdir = (*env)->GetStringUTFChars(env, nativeLibraryDir, NULL);
+  char* sofile = "/libscanmem.so";
+  char* filepath = malloc(strlen(libdir) + strlen(sofile) + 1);
+  strcpy(filepath, libdir);
+  strcat(filepath, sofile);
+  libscanmem = dlopen(filepath, RTLD_LAZY);
+  sm_get_version = dlsym(libscanmem, "sm_get_version");
 }
 
-JNIEXPORT jboolean JNICALL Java_com_memedit_ScanMem_sm_1init(JNIEnv *env, jclass obj) {
+JNIEXPORT jstring JNICALL Java_com_memedit_ScanMem_sm_1get_1version(JNIEnv *env, jclass obj) {
+  return (*env)->NewStringUTF(env, "version from C");
+  return (*env)->NewStringUTF(env, sm_get_version());
+}
+
+JNIEXPORT jboolean JNICALL Java_com_mRTLD_NOWemedit_ScanMem_sm_1init(JNIEnv *env, jclass obj) {
   return sm_init();
 }
 

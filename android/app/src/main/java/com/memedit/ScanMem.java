@@ -9,20 +9,25 @@ import java.util.HashMap;
 import android.util.Log;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
+import android.content.Context;
 
 public class ScanMem extends ReactContextBaseJavaModule {
   static {
     try {
       System.loadLibrary("scanmem-controller");
     } catch (java.lang.UnsatisfiedLinkError e) {
-      System.out.println(e.getMessage());
       Log.e("ScanMem", e.getMessage());
     }
   }
+
   private static native String sm_get_version();
+  private static native void init(String nativeLibraryDir);
+
   ScanMem(ReactApplicationContext context) {
     super(context);
+    init(context.getApplicationInfo().nativeLibraryDir);
   }
+
   @Override
   public String getName() {
     return "ScanMem";

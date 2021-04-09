@@ -1,0 +1,3 @@
+[submodule "android/app/src/main/jni/scanmem"]
+	path = android/app/src/main/jni/scanmem
+	url = https://github.com/scanmem/scanmem
