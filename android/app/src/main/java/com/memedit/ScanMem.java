@@ -22,6 +22,7 @@ public class ScanMem extends ReactContextBaseJavaModule {
 
   private static native String sm_get_version();
   private static native void init(String nativeLibraryDir);
+  private static native String sm_backend_exec_cmd(String cmd);
 
   ScanMem(ReactApplicationContext context) {
     super(context);
@@ -32,6 +33,7 @@ public class ScanMem extends ReactContextBaseJavaModule {
   public String getName() {
     return "ScanMem";
   }
+
   @ReactMethod
   public void getVersion(Promise promise) {
     try {
@@ -41,5 +43,12 @@ public class ScanMem extends ReactContextBaseJavaModule {
     } catch (Exception e) {
       promise.reject("ERR", e);
     }
+  }
+
+  @ReactMethod
+  public void execCmd(String cmd, Promise promise) {
+    String output = sm_backend_exec_cmd(cmd);
+    Log.e("ScanMem", output);
+    promise.resolve(output);
   }
 }

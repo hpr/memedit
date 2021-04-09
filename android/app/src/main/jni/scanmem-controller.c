@@ -7,7 +7,7 @@
 
 // #include "scanmem-controller.h"
 
-// in termux: ./configure --enable-static --without-readline --with pic; make
+// in termux: ./configure --enable-static --without-readline --with-pic; make
 // adb pull /data/data/com.termux/files/home/scanmem/.libs/libscanmem.so.1.0.0 android/app/src/main/jniLibs/arm64-v8a/libscanmem.so
 
 void *libscanmem;
@@ -56,8 +56,25 @@ JNIEXPORT void JNICALL Java_com_memedit_ScanMem_sm_1cleanup(JNIEnv *env, jclass 
   sm_cleanup();
 }
 
-JNIEXPORT void JNICALL Java_com_memedit_ScanMem_sm_1backend_1exec_1cmd(JNIEnv *env, jclass obj, jstring cmd) {
+JNIEXPORT jstring JNICALL Java_com_memedit_ScanMem_sm_1backend_1exec_1cmd(JNIEnv *env, jclass obj, jstring cmd) {
+  char buffer[8192];
+  freopen("/dev/null", "a", stderr);
+  setbuf(stderr, buffer);
   sm_backend_exec_cmd((*env)->GetStringUTFChars(env, cmd, 0));
+  freopen ("/dev/tty", "a", stderr);
+  
+  jobject bb = (*env)->NewDirectByteBuffer(env, buffer, strlen(buffer));
+  jclass cls_Charset = (*env)->FindClass(env, "java/nio/charset/Charset");
+  jmethodID mid_Charset_forName = (*env)->GetStaticMethodID(env, cls_Charset, "forName", "(Ljava/lang/String;)Ljava/nio/charset/Charset;");
+  jobject charset = (*env)->CallStaticObjectMethod(env, cls_Charset, mid_Charset_forName, (*env)->NewStringUTF(env, "UTF-8"));
+  jmethodID mid_Charset_decode = (*env)->GetMethodID(env, cls_Charset, "decode", "(Ljava/nio/ByteBuffer;)Ljava/nio/CharBuffer;");
+  jobject cb = (*env)->CallObjectMethod(env, charset, mid_Charset_decode, bb);
+  (*env)->DeleteLocalRef(env, bb);
+  jclass cls_CharBuffer = (*env)->FindClass(env, "java/nio/CharBuffer");
+  jmethodID mid_CharBuffer_toString = (*env)->GetMethodID(env, cls_CharBuffer, "toString", "()Ljava/lang/String;");
+  jstring str = (*env)->CallObjectMethod(env, cb, mid_CharBuffer_toString);
+
+  return str;
 }
 
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved) {
