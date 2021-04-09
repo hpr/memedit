@@ -1,0 +1,2 @@
+libscanmem-controller.so: scanmem-controller.c
+	gcc -shared -o libscanmem-controller.so scanmem-controller.c -I. -ldl -I/usr/lib/jvm/java-11-openjdk-amd64/include -I/usr/lib/jvm/java-11-openjdk-amd64/include/linux -fPIC

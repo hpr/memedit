@@ -124,6 +124,8 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
+    ndkVersion "21.4.7075529" // put in /usr/lib/android-sdk/ndk-bundle
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -137,6 +139,28 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86"
+            // moduleName "scanmem-controller"
+            // ldLibs "log"
+            // cFlags "-std=c99"
+        }
+        externalNativeBuild {
+            cmake {
+                cFlags "-fPIC"
+                arguments "-DANDROID_TOOLCHAIN=clang"
+            }
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/jni/CMakeLists.txt"
+        }
+    }
+    sourceSets {
+        main {
+            java.srcDirs 'src/main/java', 'src/main/jni'
+        }
     }
     splits {
         abi {

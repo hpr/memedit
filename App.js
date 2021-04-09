@@ -1,11 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Button, NativeModules } from 'react-native';
+const { ScanMem } = NativeModules;
 
 export default function App() {
+  const [version, setVersion] = useState("");
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Scanmem version: {version}</Text>
+      <Button title="Get Version" onPress={async () => {
+        const v = await ScanMem.getVersion();
+        setVersion(v);
+      }} />
       <StatusBar style="auto" />
     </View>
   );
