@@ -134,7 +134,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.memedit"
+        applicationId "com.scanmom"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

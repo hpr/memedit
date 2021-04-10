@@ -1,4 +1,4 @@
-package com.memedit;
+package com.scanmom;
 
 import android.app.Application;
 import android.content.Context;
@@ -11,7 +11,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.memedit.generated.BasePackageList;
+import com.scanmom.generated.BasePackageList;
 
 import org.unimodules.adapters.react.ReactAdapterPackage;
 import org.unimodules.adapters.react.ModuleRegistryAdapter;
@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import com.memedit.MyAppPackage;
+import com.scanmom.MyAppPackage;
 
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
@@ -105,7 +105,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("com.memedit.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.scanmom.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

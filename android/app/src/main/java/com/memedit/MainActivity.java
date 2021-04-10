@@ -1,4 +1,4 @@
-package com.memedit;
+package com.scanmom;
 
 import android.os.Bundle;
 

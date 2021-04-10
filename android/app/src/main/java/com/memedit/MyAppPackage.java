@@ -1,4 +1,4 @@
-package com.memedit;
+package com.scanmom;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.memedit.ScanMem;
+import com.scanmom.ScanMem;
 
 public class MyAppPackage implements ReactPackage {
 

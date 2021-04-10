@@ -1,4 +1,4 @@
-package com.memedit.generated;
+package com.scanmom.generated;
 
 import java.util.Arrays;
 import java.util.List;
